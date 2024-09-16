@@ -10,9 +10,10 @@ namespace TodoServerApp.Data.Services
             new() { Id = 2, Title = "Задача 2", Description = "Описание задачи 2", CreatedDate=DateTime.Now},
             new() { Id = 3, Title = "Задача 3", Description = "Описание задачи 3", CreatedDate=DateTime.Now},
         ];
-        public Task<IEnumerable<TaskItem>> GetTaskItemsAsync()
+        public async Task<IEnumerable<TaskItem>> GetTaskItemsAsync()
         {
-            return Task.FromResult(Tasks);
+            await Task.Delay(1000);
+            return await Task.FromResult(Tasks);
         }
     }
 }
