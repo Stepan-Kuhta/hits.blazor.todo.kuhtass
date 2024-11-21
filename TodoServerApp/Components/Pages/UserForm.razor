@@ -1,0 +1,64 @@
+﻿@page "/users/add"
+@page "/users/{Id:int}"
+@inject IDataService data
+@inject NavigationManager navigate
+
+@if (UserItem != null)
+{
+    <EditForm Model="UserItem" FormName="UserForm" OnValidSubmit="ValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <h2>Новый пользователь</h2>
+        <InputNumber @bind-Value="UserItem.Id" hidden />
+        <div class="form-group d-flex justify-content-between m-2">
+            <label class="col-form-label col-3">Имя</label>
+            <InputText @bind-Value="UserItem.FullName" class="form-control" />
+            <ValidationMessage For="() => UserItem.FullName" />
+        </div>
+        <div class="form-group d-flex justify-content-between m-2">
+            <label class="col-form-label col-3">Email</label>
+            <InputText @bind-Value="UserItem.Email" class="form-control" />
+            <ValidationMessage For="() => UserItem.Email" />
+        </div>
+        <div class="form-group d-flex justify-content-between m-2">
+            <label class="col-form-label col-3">Дата регистрации</label>
+            <InputDate @bind-Value="UserItem.RegisteredDate" class="form-control" />
+            <ValidationMessage For="() => UserItem.RegisteredDate" />
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-primary m-2" type="submit">Сохранить</button>
+            <a class="btn btn-danger m-2" href="/users">Отмена</a>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    UserItem? UserItem { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (UserItem == null)
+        {
+            UserItem = new();
+            if (Id != 0)
+            {
+                var user = await data.GetUserAsync(Id);
+                UserItem.Id = user.Id;
+                UserItem.FullName = user.FullName;
+                UserItem.Email = user.Email;
+                UserItem.RegisteredDate = user.RegisteredDate;
+            }
+        }
+    }
+
+    async Task ValidSubmit()
+    {
+        await data.SaveUserAsync(UserItem!);
+        navigate.NavigateTo("/users");
+    }
+}

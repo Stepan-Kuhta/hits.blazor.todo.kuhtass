@@ -30,6 +30,8 @@
 					<div class="card-body">
 						<p>@task.Description</p>
 						<p>@task.CreatedDate</p>
+						<p><strong>Исполнитель:</strong> @(task.Assignee != null ? task.Assignee.FullName : "Не назначен")</p>
+						<p><strong>Дата окончания:</strong> @task.FinishedDate</p>
 					</div>
 					<div class="card-footer">
 						<a class="btn btn-primary" href="tasks/@task.Id">Изменить</a>

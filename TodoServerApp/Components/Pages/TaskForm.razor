@@ -3,63 +3,82 @@
 @inject IDataService data
 @inject NavigationManager navigate
 
-<EditForm Model="TaskItem" FormName="TaskForm" OnValidSubmit="ValidSubmit">
-	<DataAnnotationsValidator />
-	<ValidationSummary />
-	<h2>Новая задача</h2>
-	<InputNumber @bind-Value="TaskItem.Id" hidden />
-	<div class="form-group d-flex justify-content-between m-2">
-		<label class="col-form-label col-3">Заголовок</label>
-		<InputText @bind-Value="TaskItem.Title" class="form-control" />
-		<ValidationMessage For="() => TaskItem.Title" />
-	</div>
-	<div class="form-group d-flex justify-content-between m-2">
-		<label class="col-form-label col-3">Описание</label>
-		<InputText @bind-Value="TaskItem.Description" class="form-control" />
-		<ValidationMessage For="() => TaskItem.Title" />
-	</div>
-	<div class="form-group d-flex justify-content-between m-2">
-		<label class="col-form-label col-3">Дата окончания</label>
-		<InputDate @bind-Value="TaskItem.FinishDate" class="form-control" />
-		<ValidationMessage For="() => TaskItem.Title" />
-	</div>
-	<div class="btn-group">
-		<button class="btn btn-primary m-2" type="submit">Сохранить</button>
-		<a class="btn btn-primary m-2" href="/">Отмена</a>
-	</div>
-</EditForm>
-
-@code
+@if (TaskItem != null)
 {
-	[Parameter]
-	public int Id { get; set; }
+    <EditForm Model="TaskItem" FormName="TaskForm" OnSubmit="ValidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <h2>Новая задача</h2>
+        <InputNumber @bind-Value="TaskItem.Id" hidden />
+        <div class="form-group d-flex justify-content-between m-2">
+            <label class="col-form-label col-3">Заголовок</label>
+            <InputText @bind-Value="TaskItem.Title" class="form-control"/>
+            <ValidationMessage For="() => TaskItem.Title" />
+        </div>
+        <div class="form-group d-flex justify-content-between m-2">
+            <label class="col-form-label col-3">Описание</label>
+            <InputText @bind-Value="TaskItem.Description" class="form-control" />
+            <ValidationMessage For="() => TaskItem.Description" />
+        </div>
+        <div class="form-group d-flex justify-content-between m-2">
+            <label class="col-form-label col-3">Дата окончания</label>
+            <InputDate @bind-Value="TaskItem.FinishedDate" class="form-control" />
+            <ValidationMessage For="() => TaskItem.FinishedDate" />
+        </div>
+        <div class="form-group d-flex justify-content-between m-2">
+            <label class="col-form-label col-3">Исполнитель</label>
+            <InputSelect @bind-Value="TaskItem.AssigneeId" class="form-control">
+                <option value="">Выберите исполнителя</option>
+                @foreach (var user in users)
+                {
+                    <option value="@user.Id">@user.FullName</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="() => TaskItem.AssigneeId" />
+        </div>
 
-	[SupplyParameterFromForm]
-	TaskItem? TaskItem { get; set; }
+        <div class="btn-group">
+            <button class="btn btn-primary m-2" type="submit">Сохранить</button>
+            <a class="btn btn-primary m-2" href="/">Отмена</a>
+        </div>
+    </EditForm>
+}
 
-	protected override async Task OnInitializedAsync()
-	{
-		await base.OnInitializedAsync();
-		if (TaskItem == null)
-		{
-			TaskItem = new();
-			if (Id != 0)
-			{
-				var src = await data.GetTaskAsync(Id);
-				if (src != null)
-				{
-					TaskItem.Id = src.Id;
-					TaskItem.Title = src.Title;
-					TaskItem.Description = src.Description;
-					TaskItem.FinishDate = src.FinishDate;
-				}
-			}
-		}
-	}
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    IEnumerable<UserItem> users = new List<UserItem>();
 
-	async Task ValidSubmit()
-	{
-		await data.SaveAsync(TaskItem!);
-		navigate.NavigateTo("/");
-	}
+    [SupplyParameterFromForm]
+    TaskItem? TaskItem { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        users = await data.GetAllUsersAsync();
+
+        if (TaskItem == null)
+        {
+            TaskItem = new();
+            if (Id != 0)
+            {
+                var task = await data.GetTaskAsync(Id);
+                if (task != null)
+                {
+                    TaskItem.Id = task.Id;
+                    TaskItem.Title = task.Title;
+                    TaskItem.Description = task.Description;
+                    TaskItem.FinishedDate = task.FinishedDate;
+                    TaskItem.AssigneeId = task.AssigneeId; 
+                }
+            }
+        }
+    }
+
+    async Task ValidSubmit()
+    {
+        await data.SaveAsync(TaskItem!);
+        navigate.NavigateTo("/");
+    }
 }

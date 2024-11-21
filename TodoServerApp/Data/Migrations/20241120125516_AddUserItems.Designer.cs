@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TodoServerApp.Data;
 
@@ -11,9 +12,11 @@ using TodoServerApp.Data;
 namespace TodoServerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120125516_AddUserItems")]
+    partial class AddUserItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,33 +258,33 @@ namespace TodoServerApp.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8376),
+                            CreatedDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(6787),
                             Description = "Описание 1",
-                            FinishedDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8392),
+                            FinishedDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(6803),
                             Title = "Название 1"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8394),
+                            CreatedDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(6805),
                             Description = "Описание 2",
-                            FinishedDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8395),
+                            FinishedDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(6805),
                             Title = "Название 2"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8396),
+                            CreatedDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(6807),
                             Description = "Описание 3",
-                            FinishedDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8397),
+                            FinishedDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(6807),
                             Title = "Название 3"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8398),
+                            CreatedDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(6808),
                             Description = "Описание 4",
-                            FinishedDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8400),
+                            FinishedDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(6809),
                             Title = "Название 4"
                         });
                 });
@@ -315,14 +318,14 @@ namespace TodoServerApp.Migrations
                             Id = 1,
                             Email = "user1@example.com",
                             FullName = "Пользователь 1",
-                            RegisteredDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8708)
+                            RegisteredDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(7027)
                         },
                         new
                         {
                             Id = 2,
                             Email = "user2@example.com",
                             FullName = "Пользователь 2",
-                            RegisteredDate = new DateTime(2024, 11, 20, 16, 2, 45, 406, DateTimeKind.Local).AddTicks(8710)
+                            RegisteredDate = new DateTime(2024, 11, 20, 15, 55, 15, 905, DateTimeKind.Local).AddTicks(7029)
                         });
                 });
 

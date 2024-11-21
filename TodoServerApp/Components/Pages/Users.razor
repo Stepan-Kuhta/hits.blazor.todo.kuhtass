@@ -1,0 +1,63 @@
+﻿@page "/users"
+@inject IDataService data
+@inject NavigationManager navigate
+@rendermode InteractiveServer
+@attribute [Authorize]
+
+<PageTitle>Пользователи</PageTitle>
+
+<h1>Список пользователей</h1>
+<div class="container">
+    @if (users == null)
+    {
+        <tr>
+            <td colspan="5">Loading...</td>
+        </tr>
+    }
+    else
+    {
+        <div class="btn-group m-2">
+            <button class="btn btn-primary" @onclick="AddUser">Добавить пользователя</button>
+        </div>
+        <div class="card-group">
+            @foreach (var user in users)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        @user.FullName
+                    </div>
+                    <div class="card-body">
+                        <p>@user.Email</p>
+                        <p>@user.RegisteredDate</p>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-primary" href="users/@user.Id">Изменить</a>
+                        <button class="btn btn-danger" @onclick="async () => await DeleteUser(user.Id)">Удалить</button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    IEnumerable<UserItem>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        users = await data.GetAllUsersAsync();
+    }
+
+    void AddUser()
+    {
+        navigate.NavigateTo("users/add");
+    }
+
+    async Task DeleteUser(int id)
+    {
+        await data.DeleteUserAsync(id);
+        users = await data.GetAllUsersAsync();
+    }
+}
+
